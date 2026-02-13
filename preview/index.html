@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nostalgia Drafts</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0e0c;
+      --surface: #1a1814;
+      --surface-hover: #222018;
+      --border: rgba(212, 175, 55, 0.15);
+      --text: #f5f0e6;
+      --text-muted: #9a9080;
+      --accent: #d4af37;
+      --accent-dim: #b8941f;
+      --success: #5a9a6e;
+      --success-hover: #6aab7e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .app {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 0.25rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--text) 0%, var(--text-muted) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .btn-generate {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .btn-generate:hover { background: var(--accent-dim); color: var(--bg); }
+    .btn-generate:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .generate-status {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .generate-status.loading { color: var(--accent); }
+    .generate-status.error { color: #e07a6e; }
+    .generate-status.success { color: var(--success); }
+    .progress-bar-container {
+      width: 120px;
+      height: 6px;
+      background: rgba(212, 175, 55, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+      display: inline-block;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    .spinner {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 0.4rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .filters {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 2rem;
+    }
+    .filters a {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.2s, background 0.2s;
+    }
+    .filters a:hover {
+      color: var(--text);
+      background: var(--surface-hover);
+    }
+    .filters a.active {
+      color: var(--accent);
+      background: rgba(212, 175, 55, 0.08);
+    }
+    .drafts { display: flex; flex-direction: column; gap: 1.5rem; }
+    .draft-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .draft-card:hover { border-color: rgba(212, 175, 55, 0.25); }
+    .draft-card.video-pending { border-color: rgba(212, 175, 55, 0.4); }
+    .badges { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .badge {
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-account { background: rgba(212, 175, 55, 0.2); color: var(--accent); }
+    .badge-platform { background: rgba(154, 144, 128, 0.2); color: var(--text-muted); }
+    .badge-status { background: rgba(154, 144, 128, 0.15); color: var(--text-muted); }
+    .badge-video-pending { background: rgba(212, 175, 55, 0.25); color: var(--accent); }
+    .caption { margin: 0.5rem 0; white-space: pre-wrap; line-height: 1.6; font-size: 0.95rem; color: var(--text); }
+    .hashtags { color: var(--accent-dim); font-size: 0.85rem; margin-bottom: 1rem; }
+    .media-container {
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 9 / 16;
+      margin: 1rem 0;
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+    .media-container video, .media-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .no-media {
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+    .video-pending-msg { color: var(--accent); margin: 0.5rem 0; font-size: 0.9rem; }
+    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+    button {
+      padding: 0.55rem 1.1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, transform 0.1s;
+    }
+    button:active { transform: scale(0.98); }
+    .btn-post { background: var(--success); color: white; }
+    .btn-post:hover { background: var(--success-hover); }
+    .btn-retry { background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); }
+    .btn-retry:hover { background: rgba(212, 175, 55, 0.1); border-color: var(--border); }
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+    }
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    .empty-state h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      color: var(--text);
+    }
+    .empty-state p {
+      color: var(--text-muted);
+      margin: 0 0 1.5rem;
+      font-size: 0.95rem;
+    }
+    .empty-state code {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      background: var(--bg);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+    .error { color: #e07a6e; margin-top: 0.5rem; font-size: 0.85rem; }
+    .feedback-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .feedback-modal.visible { display: flex; }
+    .feedback-box {
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      border: 1px solid var(--border);
+    }
+    .feedback-box h3 { margin: 0 0 0.5rem; font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+    .feedback-box p { margin: 0 0 0.75rem; color: var(--text-muted); font-size: 0.9rem; }
+    .feedback-box textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      resize: vertical;
+    }
+    .feedback-box textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .feedback-box .modal-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header-row">
+      <div>
+        <h1>Nostalgia Drafts</h1>
+        <p class="subtitle">Review, approve, and publish your nostalgia shorts</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <span class="generate-status" id="generate-status"></span>
+        <button class="btn-generate" id="btn-generate" onclick="generate()">Generate</button>
+      </div>
+    </div>
+    <div class="filters">
+      <a href="?status=pending" id="filter-pending" class="active">Pending</a>
+      <a href="?status=all" id="filter-all">All</a>
+    </div>
+    <div class="drafts" id="drafts"></div>
+  </div>
+
+  <div class="feedback-modal" id="feedback-modal">
+    <div class="feedback-box">
+      <h3>Retry with feedback</h3>
+      <p>Optional: tell OpenClaw how to improve (e.g. "make it funnier", "wrong era")</p>
+      <textarea id="feedback-input" placeholder="e.g. make it funnier"></textarea>
+      <div class="modal-actions">
+        <button class="btn-retry" onclick="closeFeedbackModal()">Cancel</button>
+        <button class="btn-post" onclick="submitRetry()">Retry</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const status = params.get('status') || 'pending';
+
+    document.getElementById('filter-pending').classList.toggle('active', status === 'pending');
+    document.getElementById('filter-all').classList.toggle('active', status === 'all');
+
+    async function fetchDrafts() {
+      const res = await fetch(`/api/drafts?status=${status}`);
+      return res.json();
+    }
+
+    function renderDrafts(drafts) {
+      const el = document.getElementById('drafts');
+      if (!drafts.length) {
+        el.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📼</div>
+            <h2>No drafts yet</h2>
+            <p>Click Generate to create nostalgia content for Gen Z, Gen X, and Millennials (up to 15 min)</p>
+            <button class="btn-generate" style="margin-top:0.5rem;padding:0.65rem 1.5rem;" onclick="generate()" id="btn-generate-empty">Generate</button>
+          </div>
+        `;
+        return;
+      }
+      el.innerHTML = drafts.map(d => renderCard(d)).join('');
+    }
+
+    function renderCard(d) {
+      const isVideoPending = d.status === 'video_pending';
+      const mediaUrl = d.has_media ? `/api/drafts/${d.id}/media` : null;
+      const mediaHtml = mediaUrl
+        ? (d.media_type === 'video'
+            ? `<video src="${mediaUrl}" controls muted playsinline></video>`
+            : `<img src="${mediaUrl}" alt="Preview" />`)
+        : '<div class="no-media">No media</div>';
+      const videoPendingMsg = isVideoPending
+        ? '<div class="video-pending-msg">Video build failed or pending — add manually or retry generation.</div>'
+        : '';
+
+      return `
+        <div class="draft-card ${isVideoPending ? 'video-pending' : ''}" data-id="${d.id}">
+          <div class="badges">
+            <span class="badge badge-account">${escapeHtml(d.account)}</span>
+            <span class="badge badge-platform">${escapeHtml(d.platform)}</span>
+            <span class="badge badge-status ${isVideoPending ? 'badge-video-pending' : ''}">${escapeHtml(d.status)}</span>
+          </div>
+          ${videoPendingMsg}
+          <div class="caption">${escapeHtml(d.hook || '')}\n\n${escapeHtml(d.caption || '')}</div>
+          <div class="hashtags">${escapeHtml(d.hashtags || '')}</div>
+          <div class="media-container">${mediaHtml}</div>
+          <div class="actions">
+            <button class="btn-post" onclick="post('${d.id}')">Post</button>
+            <button class="btn-retry" onclick="openRetryModal('${d.id}')">Retry</button>
+          </div>
+          <div class="error" id="err-${d.id}"></div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(s) {
+      if (!s) return '';
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function setError(id, msg) {
+      const el = document.getElementById(`err-${id}`);
+      if (el) el.textContent = msg || '';
+    }
+
+    async function post(id) {
+      setError(id, '');
+      try {
+        const res = await fetch(`/api/drafts/${id}/post`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          const card = document.querySelector(`[data-id="${id}"]`);
+          if (card) card.remove();
+          if (!document.querySelectorAll('.draft-card').length) {
+            fetchDrafts().then(renderDrafts);
+          }
+        } else {
+          setError(id, data.error || 'Post failed');
+        }
+      } catch (e) {
+        setError(id, e.message);
+      }
+    }
+
+    let retryId = null;
+    function openRetryModal(id) {
+      retryId = id;
+      document.getElementById('feedback-input').value = '';
+      document.getElementById('feedback-modal').classList.add('visible');
+    }
+    function closeFeedbackModal() {
+      retryId = null;
+      document.getElementById('feedback-modal').classList.remove('visible');
+    }
+    async function submitRetry() {
+      if (!retryId) return;
+      const feedback = document.getElementById('feedback-input').value.trim();
+      setError(retryId, '');
+      try {
+        const res = await fetch(`/api/drafts/${retryId}/retry`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ feedback: feedback || undefined })
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeFeedbackModal();
+          fetchDrafts().then(renderDrafts);
+        } else {
+          setError(retryId, data.error || 'Retry failed');
+        }
+      } catch (e) {
+        setError(retryId, e.message);
+      }
+      retryId = null;
+    }
+
+    function setGenerateStatus(msg, type) {
+      const el = document.getElementById('generate-status');
+      const emptyBtn = document.getElementById('btn-generate-empty');
+      const headerBtn = document.getElementById('btn-generate');
+      if (el) {
+        el.textContent = msg;
+        el.className = 'generate-status' + (type ? ' ' + type : '');
+      }
+      const disabled = type === 'loading';
+      if (headerBtn) headerBtn.disabled = disabled;
+      if (emptyBtn) emptyBtn.disabled = disabled;
+    }
+
+    async function generate() {
+      setGenerateStatus('', 'loading');
+      const statusEl = document.getElementById('generate-status');
+
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ count: 1, accounts: ['genz', 'genx', 'millennial'] })
+        });
+        const data = await res.json();
+        if (!data.success || !data.job_id) {
+          setGenerateStatus(data.error || 'Failed to start', 'error');
+          return;
+        }
+
+        const jobId = data.job_id;
+        const maxPolls = 900; // 30 min at 2s (matches backend timeout)
+        let polls = 0;
+
+        function updateProgress(status, step, message, progress, error) {
+          if (status === 'done' || status === 'failed') {
+            if (statusEl) statusEl.innerHTML = '';
+            if (status === 'done') {
+              setGenerateStatus('Done', 'success');
+              setTimeout(() => setGenerateStatus(''), 3000);
+              fetchDrafts().then(renderDrafts);
+            } else {
+              setGenerateStatus(error || 'Failed', 'error');
+            }
+            return true; // finished
+          }
+          if (!statusEl) return false;
+          const pct = progress != null ? progress : 0;
+          statusEl.innerHTML = `<span class="spinner"></span> ${escapeHtml(message || 'Processing...')}
+            <span class="progress-bar-container"><span class="progress-bar-fill" style="width:${pct}%"></span></span>`;
+          statusEl.className = 'generate-status loading';
+          return false; // still running
+        }
+
+        while (polls < maxPolls) {
+          await new Promise(r => setTimeout(r, polls === 0 ? 500 : 2000));
+          polls++;
+          const statusRes = await fetch(`/api/generate/status?job_id=${encodeURIComponent(jobId)}`);
+          if (!statusRes.ok) break;
+          const s = await statusRes.json();
+          if (updateProgress(s.status, s.step, s.message, s.progress, s.error)) return;
+        }
+
+        setGenerateStatus('Timed out', 'error');
+      } catch (e) {
+        setGenerateStatus(e.message || 'Error', 'error');
+      }
+    }
+
+    fetchDrafts().then(renderDrafts).catch(() => {
+      document.getElementById('drafts').innerHTML = '<div class="empty-state"><h2>Failed to load drafts</h2><p>Make sure the preview server is running.</p></div>';
+    });
+  </script>
+</body>
+</html>

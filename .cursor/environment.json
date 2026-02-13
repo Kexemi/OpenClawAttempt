@@ -1,0 +1,5 @@
+{
+  "snapshot": "POPULATED_FROM_SETTINGS",
+  "install": "pip install -r requirements.txt",
+  "terminals": []
+}

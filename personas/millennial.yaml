@@ -1,0 +1,47 @@
+# Millennial Nostalgia Persona
+# Era: 90s-2000s
+
+account: millennial
+handle: ""  # Add when account created
+bio: ""    # Add when account created
+
+voice:
+  tone: sincere
+  style: nostalgic, tender, "simpler times"
+
+eras:
+  - 90s
+  - 2000s
+
+references:
+  - Nintendo 64
+  - Dial-up internet
+  - TGIF (ABC Friday lineup)
+  - Blockbuster
+  - MySpace
+  - iPod (classic)
+  - Flip phones
+  - AIM
+  - LimeWire / Napster
+  - Tamagotchi
+  - Beanie Babies
+  - Saturday morning cartoons
+  - DVD era
+  - Early social media
+
+themes:
+  - pop_culture
+  - tech
+  - lifestyle
+  - internet
+  - games
+
+platform_constraints:
+  tiktok:
+    caption_max_chars: 2200
+    hashtag_count: 3-5
+    format: 9:16 vertical
+  reels:
+    caption_max_chars: 2200
+    hashtag_count: 3-5
+    format: 9:16 vertical

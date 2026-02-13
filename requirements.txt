@@ -1,0 +1,13 @@
+# Nostalgia Content Pipeline
+# Python 3.9+
+
+# Preview backend
+flask>=3.0.0
+werkzeug>=3.0.0
+
+# HTTP and API
+requests>=2.31.0
+
+# Config and env
+python-dotenv>=1.0.0
+pyyaml>=6.0.0

@@ -1,0 +1,13 @@
+# Late account IDs per persona
+# Get IDs via: GET https://getlate.dev/api/v1/accounts (with Bearer token)
+# Connect accounts via: GET /v1/connect/tiktok?profileId=... and /v1/connect/instagram?profileId=...
+
+genz:
+  tiktok_account_id: null  # Add ID when you connect TikTok
+  instagram_account_id: "698ea22d4525118cee8d6c12"
+genx:
+  tiktok_account_id: null
+  instagram_account_id: "698ea22d4525118cee8d6c12"
+millennial:
+  tiktok_account_id: null
+  instagram_account_id: "698ea22d4525118cee8d6c12"

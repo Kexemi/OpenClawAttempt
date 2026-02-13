@@ -1,0 +1,46 @@
+# Gen X Nostalgia Persona
+# Era: 80s-90s
+
+account: genx
+handle: ""  # Add when account created
+bio: ""    # Add when account created
+
+voice:
+  tone: sincere
+  style: nostalgic, wry, "the good old days"
+
+eras:
+  - 80s
+  - 90s
+
+references:
+  - MTV (actual music videos)
+  - Mixtapes
+  - Arcades
+  - Sitcoms (Family Ties, Cheers, Growing Pains)
+  - Grunge
+  - Early internet (AOL, dial-up)
+  - CDs and CD players
+  - VHS
+  - Atari, NES, SNES
+  - Walkman
+  - Boomboxes
+  - Mall culture
+  - Blockbuster (early years)
+
+themes:
+  - pop_culture
+  - tech
+  - lifestyle
+  - internet
+  - games
+
+platform_constraints:
+  tiktok:
+    caption_max_chars: 2200
+    hashtag_count: 3-5
+    format: 9:16 vertical
+  reels:
+    caption_max_chars: 2200
+    hashtag_count: 3-5
+    format: 9:16 vertical

@@ -1,0 +1,12 @@
+# DEPRECATED: Asset library no longer used. Media is generated via xAI Imagine.
+# Kept for reference only. See openclaw_skills/nostalgia_content.md for new format.
+
+blockbuster_store: 90s_retail/blockbuster_store
+nintendo_64: 90s_tech/nintendo_64
+dial_up: 90s_tech/dial_up
+myspace: 2000s_internet/myspace
+ipod: 2000s_tech/ipod
+webkinz: 2000s_games/webkinz
+vine: 2010s_social/vine
+mtv: 80s_culture/mtv
+arcade: 80s_culture/arcade

@@ -1,0 +1,46 @@
+# Gen Z Nostalgia Persona
+# Era: 2000s-2010s
+
+account: genz
+handle: ""  # Add when account created
+bio: ""    # Add when account created
+
+voice:
+  tone: sincere
+  style: warm, relatable, "remember when" energy
+
+eras:
+  - 2000s
+  - 2010s
+
+references:
+  - Webkinz
+  - Nintendo DS
+  - Early YouTube
+  - Vine
+  - VSCO
+  - Early streaming (Netflix queue, early Spotify)
+  - Flip phones (Sidekick, LG Chocolate)
+  - Wii
+  - Club Penguin
+  - Tamagotchi revival
+  - iPod Touch
+  - Early Instagram
+  - Tumblr
+
+themes:
+  - pop_culture
+  - tech
+  - lifestyle
+  - internet
+  - games
+
+platform_constraints:
+  tiktok:
+    caption_max_chars: 2200
+    hashtag_count: 3-5
+    format: 9:16 vertical
+  reels:
+    caption_max_chars: 2200
+    hashtag_count: 3-5
+    format: 9:16 vertical
