@@ -6,19 +6,28 @@ Use this so a Cursor **Cloud Agent** can work on this repo overnight (or on dema
 
 ## 1. Put the project on GitHub
 
-If the repo is not on GitHub yet:
+**Done for you:** This folder is already a git repo with an initial commit on branch `main`.
 
-1. Create a new repository on GitHub (e.g. `OpenClawAttempt`).
-2. In this folder (OpenClawAttempt), run:
+**You do:**
+
+1. **Create the repo on GitHub**
+   - Go to [github.com/new](https://github.com/new).
+   - Repository name: `OpenClawAttempt` (or any name you like).
+   - Leave it empty (no README, no .gitignore).
+   - Create repository.
+
+2. **Add the remote and push** (already done if you used this repo; otherwise replace `Kexemi` with your GitHub username):
    ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/OpenClawAttempt.git
+   git remote add origin https://github.com/Kexemi/OpenClawAttempt.git
    git push -u origin main
    ```
-3. Replace `YOUR_USERNAME` with your GitHub username.
+   If you use SSH: `git remote add origin git@github.com:Kexemi/OpenClawAttempt.git`
+
+**Optional:** To use your real name/email for future commits:
+   ```bash
+   git config --global user.name "Your Name"
+   git config --global user.email "you@example.com"
+   ```
 
 ---
 
@@ -56,7 +65,7 @@ Use the same values as in your local `.env`. Save.
 
 In [Cursor Dashboard → Cloud Agents](https://cursor.com/dashboard?tab=cloud-agents), under **Default repository**, set:
 
-`https://github.com/YOUR_USERNAME/OpenClawAttempt`
+`https://github.com/Kexemi/OpenClawAttempt`
 
 so you don’t have to pick the repo every time.
 
